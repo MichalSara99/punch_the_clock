@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+
+{% block additional_links %}
+    <link rel="stylesheet" href="{{url_for('static',filename='table-all.css')}}"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static',filename='bootstrap-table.min.css')}}">
+{% endblock %}
+
+{% block title %} Punch The Clock! - TimeSheets {% endblock %}
+
+
+{% block page_content %}
+<div class="page-header">
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+<div class="input-group">
+    <span class="input-group-addon" title="* Year" id="yearSelect">Year</span>
+    {{ form.searchYear(id='yearSelect' ,class='form-control') }}
+    <span class="input-group-addon" title="* Month" id="monthSelect">Month</span>
+    {{ form.searchMonth(id='monthSelect'  ,class='form-control') }}
+    <span class="input-group-addon" title="* Week" id="weekSelect">Week</span>
+    {{ form.searchWeek(id='weekSelect' ,class='form-control') }}
+    <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+    {{ form.searchSubmit(id='showSubmit' ,class='form-control') }}
+    <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+    <button  id="create" name="createButton"  class="form-control">
+            Create
+    </button>
+</div>
+</form>
+
+</div>
+
+
+<table id="my_table_1" data-toggle="table" data-sort-stable="true">
+    <thead>
+    <tr>
+        <th data-sortable="false">Date</th>
+        <th data-sortable="false">Weekday</th>
+        <th data-sortable="false">Start Time</th>
+        <th data-sortable="false">Lunch Duration</th>
+        <th data-sortable="false">End Time</th>
+        <th data-sortable="false">Worked</th>
+    </tr>
+    </thead>
+   <tbody>
+        {% for tpl in time_table %}
+        <tr>
+            <td><input type="hidden" value="{{tpl[0]}}">{{tpl[1].strftime('%Y-%m-%d')}}</td>
+            <td>{{tpl[2]}}</td>
+            <td><input type="time" id = "start_{{tpl[0]}}" name="start_time" value="{{tpl[3]|formatTimedelta}}"></td>
+            <td><input type="time" id = "lunch_{{tpl[0]}}" name="lunch_duration" value="{{tpl[4]|formatTimedelta}}"></td>
+            <td><input type="time" id = "end_{{tpl[0]}}" name="end_time" value="{{tpl[5]|formatTimedelta}}"></td>
+            <td><input type="time" id = "worked_{{tpl[0]}}" name="worked_time" value="{{tpl[6]|formatTimedelta}}" disabled></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+</table><br/><br/>
+<div class="form-group">
+  <label for="comment">Notes:</label>
+  <textarea style="overflow:auto;resize:none" class="form-control" rows="5" id="comment"></textarea>
+</div>
+{% if save_btn %}
+    <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+    <div class="text-right"> <!--You can add col-lg-12 if you want -->
+        <button id="save" name="saveButton" class="btn-info btn">Save</button>
+    </div>
+{% endif %}
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{url_for('static',filename='popper.min.js')}}"
+         crossorigin="anonymous"></script>
+<script src="{{url_for('static',filename='bootstrap.min.js')}}"
+            crossorigin="anonymous"></script>
+<script src="{{url_for('static',filename='bootstrap-table.min.js')}}"></script>
+<script type = "text/javascript" src="{{url_for('static',filename='my.min.js')}}"></script>
+<script type = "text/javascript" src="{{url_for('static',filename='my.doc.js')}}"></script>
+
+<script>
+//$('button[name=showButton]').click(function() {
+//    var year = $('select[name="searchYear"]').val();
+//    var month =  $('select[name="searchMonth"]').val();
+//    var week = $('select[name="searchWeek"]').val();
+//    $.ajax({
+//        type: 'GET',
+//        url: "/timesheets/?year=" + year +"/month="+month+"/week="+ week,
+//        contentType: "application/json",
+//    });
+//});
+
+
+</script>
+
+{% endblock %}
