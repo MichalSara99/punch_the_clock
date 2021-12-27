@@ -5,7 +5,7 @@ from sqlalchemy import desc,asc
 from . import main
 from .. import db
 import json
-from .. models import User,Work,Time_dimension
+from .. models import User,Work,Work_notes,Time_dimension
 from datetime import datetime,time
 from .forms import SelectForm
 
@@ -31,11 +31,25 @@ def timesheet(year,month,week,user_id):
         order_by(asc(Time_dimension.id)).all()
     return tms
 
+def notes(year,month,week,user_id):
+    nts = db.session.query(Time_dimension.id,Work_notes.notes). \
+        join(Work_notes, Time_dimension.id == Work_notes.td_first_id). \
+        filter(Time_dimension.year == year,
+               Time_dimension.month == month,
+               Time_dimension.week == week,
+               Work_notes.user_id == user_id,
+               Time_dimension.weekend_flag == 'f'). \
+        order_by(asc(Time_dimension.id)).all()
+    if len(nts) <= 0:
+        return ''
+    return nts[0][1]
+
 
 @main.route('/timesheets',methods=['POST','GET'])
 @main.route('/timesheets/<int:year>/<int:month>/<int:week>',methods=['POST','GET'])
 def timesheets(year = None,month=None,week=None):
     save_btn = False
+    create_btn = False
     form = SelectForm()
     if request.method == 'POST':
         next = url_for('main.timesheets',
@@ -49,111 +63,85 @@ def timesheets(year = None,month=None,week=None):
         form.searchWeek.data = week
         form.update_weeks(year, month)
         tms = timesheet(year,month,week,current_user.id)
+        nts = notes(year,month,week,current_user.id)
     else:
         form.update_weeks(int(form.searchYear.data),int(form.searchMonth.data))
         tms = timesheet(int(form.searchYear.data),int(form.searchMonth.data),
                         int(form.searchWeek.data),current_user.id)
+        nts = notes(int(form.searchYear.data), int(form.searchMonth.data),
+                    int(form.searchWeek.data), current_user.id)
     save_btn = False if len(tms) <= 0 else True
+    create_btn = not save_btn
     return render_template('timesheets.html',
-                           form=form,time_table=tms,
-                           save_btn=save_btn)
-
-@main.route('/about')
-def about():
-    return render_template('about.html')
-
-'''
-    if form.validate_on_submit():
-        year = form.searchYear.data
-        month = form.searchMonth.data
-        week = form.searchWeek.data
-        tms = timesheet(year, month, week,current_user.id)
-        save_btn = False if len(tms) <= 0 else True
-        next = url_for('main.timesheets_show',
-                   year=year,
-                   month=month,
-                   week=week)
-        return redirect(next)
-    form.update_weeks(year,month)
-    form.searchYear.data = year
-    form.searchMonth.data = month
-    form.searchWeek.data = week
-    tms = timesheet(year,month,week,current_user.id)
-    return render_template('timesheets.html',
-                           form=form, time_table=tms,
-                           save_btn=save_btn)
-'''
+                           form=form,time_table=tms,notes_area = nts,
+                           save_btn=save_btn,create_btn = create_btn)
 
 
-
-'''
-    if request.method == "GET":
-        ymw = InitYMW.ymw()
-        today = datetime.now()
-        tms = db.session.query(Time_dimension.id,
-                                    Time_dimension.db_date,
-                                    Time_dimension.day_name,
-                                    Work.start_time,
-                                    Work.lunch_duration,
-                                    Work.end_time,
-                                    Work.worked_time).\
-            join(Work,Time_dimension.id == Work.td_id).\
-            filter(Time_dimension.year == today.year,
-                   Time_dimension.month == today.month,
-                   Time_dimension.week == today.isocalendar()[1],
-                   Work.user_id == current_user.id,
-                   Time_dimension.weekend_flag == 'f').\
-            order_by(asc(Time_dimension.id)).all()
-        if len(tms)<=0:
-            save_btn = False
-'''
-'''
-    return render_template('timesheets.html',
-                           years = ymw['years'],year_selected=today.year,
-                           months = ymw['months'],month_selected = today.month,
-                           weeks = ymw['weeks'],week_selected = str(today.isocalendar()[1]),
-                           user_tms = tms,save_btn=save_btn)
-'''
-
-
-
-'''
-@main.route('/on_show',methods=['POST','GET'])
-def on_show():
+@main.route('/on_save',methods=['POST','GET'])
+def on_save():
     if request.method == "POST":
         data_sent = request.get_json()
-        tms = db.session.query(Time_dimension.id,
-                                    Time_dimension.db_date,
-                                    Time_dimension.day_name,
-                                    Work.start_time,
-                                    Work.lunch_duration,
-                                    Work.end_time,
-                                    Work.worked_time).\
-            join(Work,Time_dimension.id == Work.td_id).\
-            filter(Time_dimension.year == data_sent['year'],
-                   Time_dimension.month == data_sent['month'],
-                   Time_dimension.week == data_sent['week'],
-                   Work.user_id == current_user.id,
-                   Time_dimension.weekend_flag == 'f').all()
-        if len(tms) == 0:
-            ins = db.session.query(Time_dimension.id). \
-                filter(Time_dimension.year == data_sent['year'],
-                       Time_dimension.month == data_sent['month'],
-                       Time_dimension.week == data_sent['week'],
-                       Time_dimension.weekend_flag == 'f').all()
-            for i in ins:
-                work = Work(user_id = current_user.id,
-                            td_id = i[0],
-                            start_time = '00:00:00',
-                            lunch_duration = '00:00:00',
-                            end_time = '00:00:00',
-                            worked_time='00:00:00')
-                db.session.add(work)
-                db.session.commit()
-            print(ins)
-        flash('New week has been added to your timesheets.')
-    return redirect(url_for('main.timesheets'))
-'''
+        print(data_sent)
+        d = data_sent['data']
+        n = data_sent['notes']
+        works = [Work.query.filter_by(user_id=current_user.id,td_id = k).one() for k in d.keys()]
+        last_td_id = 0
+        for w in works:
+            td_id_str = str(w.td_id)
+            last_td_id = w.td_id
+            w.start_time = d[td_id_str]['start']
+            w.lunch_duration = d[td_id_str]['lunch']
+            w.end_time = d[td_id_str]['end']
+            w.worked_time = d[td_id_str]['worked']
+            db.session.merge(w)
+            db.session.flush()
+            db.session.commit()
+        work_notes = Work_notes.query.filter_by(user_id=current_user.id, td_first_id=works[0].td_id).first()
+        work_notes.notes = n
+        db.session.merge(work_notes)
+        db.session.flush()
+        db.session.commit()
+        td = Time_dimension.query.filter_by(id = last_td_id).first()
+        next = url_for('main.timesheets',
+                       year=td.year,
+                       month = td.month,
+                       week = td.week)
+        flash('Changes have been saved.')
+        return redirect(next)
+
+
+
+@main.route('/on_create',methods=['POST','GET'])
+def on_create():
+    if request.method == "POST":
+        data_sent = request.get_json()
+        ids = Time_dimension.query.filter_by(year=data_sent['year'],
+                                             month=data_sent['month'],
+                                             week=data_sent['week'])\
+            .order_by(asc(Time_dimension.week)).all()
+        for i in ids:
+            work = Work(user_id = current_user.id,
+                        td_id = i.id,
+                        start_time = '00:00:00',
+                        lunch_duration = '00:00:00',
+                        end_time = '00:00:00',
+                        worked_time = '00:00:00')
+            db.session.add(work)
+            db.session.commit()
+        work_notes = Work_notes(user_id = current_user.id,
+                               td_first_id = ids[0].id,
+                               notes='')
+        db.session.add(work_notes)
+        db.session.commit()
+        print(data_sent)
+        next = url_for('main.timesheets',
+                       year=int(data_sent['year']),
+                       month = int(data_sent['month']),
+                       week = int(data_sent['week']))
+        flash('New week has been added.')
+        return redirect(next)
+
+
 
 @main.route('/get_year_month',methods=['POST','GET'])
 def on_year_month_data():
@@ -173,7 +161,7 @@ def on_year_month_data():
                                                        week=w.week, weekend_flag='f') \
                 .order_by(desc(Time_dimension.db_date)).first()
             if not first_date is None and not last_date is None:
-                date_period = first_date.db_date.strftime("%m/%d/%Y") + ' - ' + last_date.db_date.strftime("%m/%d/%Y")
+                date_period = first_date.db_date.strftime("%d/%m/%Y") + ' - ' + last_date.db_date.strftime("%d/%m/%Y")
                 sent_back[w.week] = date_period
     return jsonify(sent_back)
 
@@ -201,3 +189,8 @@ def calculate_time():
             sent_back['message'] = 'OK'
         print(sent_back)
     return jsonify(sent_back)
+
+
+@main.route('/about')
+def about():
+    return render_template('about.html')

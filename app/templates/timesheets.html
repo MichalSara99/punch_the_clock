@@ -11,9 +11,9 @@
 
 
 {% block page_content %}
+<form method="POST">
 <div class="page-header">
 
-<form method="POST">
     {{ form.hidden_tag() }}
 <div class="input-group">
     <span class="input-group-addon" title="* Year" id="yearSelect">Year</span>
@@ -25,11 +25,12 @@
     <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
     {{ form.searchSubmit(id='showSubmit' ,class='form-control') }}
     <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
-    <button  id="create" name="createButton"  class="form-control">
-            Create
-    </button>
+    {% if create_btn %}
+    <button type="submit" name="createButton" class="form-control btn-primary">Create</button>
+    {% endif %}
+
 </div>
-</form>
+<!--</form>-->
 
 </div>
 
@@ -48,7 +49,7 @@
    <tbody>
         {% for tpl in time_table %}
         <tr>
-            <td><input type="hidden" value="{{tpl[0]}}">{{tpl[1].strftime('%Y-%m-%d')}}</td>
+            <td><input type="hidden" name="date_id" value="{{tpl[0]}}">{{tpl[1].strftime('%d-%m-%Y')}}</td>
             <td>{{tpl[2]}}</td>
             <td><input type="time" id = "start_{{tpl[0]}}" name="start_time" value="{{tpl[3]|formatTimedelta}}"></td>
             <td><input type="time" id = "lunch_{{tpl[0]}}" name="lunch_duration" value="{{tpl[4]|formatTimedelta}}"></td>
@@ -60,13 +61,14 @@
 </table><br/><br/>
 <div class="form-group">
   <label for="comment">Notes:</label>
-  <textarea style="overflow:auto;resize:none" class="form-control" rows="5" id="comment"></textarea>
+  <textarea style="overflow:auto;resize:none" class="form-control" rows="5" id="notes">{{notes_area}}</textarea>
 </div>
 {% if save_btn %}
-    <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
     <div class="text-right"> <!--You can add col-lg-12 if you want -->
-        <button id="save" name="saveButton" class="btn-info btn">Save</button>
+        <button id="save" name="saveButton" class="btn btn-info">Save</button>
     </div>
+</form>
 {% endif %}
 
 
@@ -81,20 +83,46 @@
 <script src="{{url_for('static',filename='bootstrap-table.min.js')}}"></script>
 <script type = "text/javascript" src="{{url_for('static',filename='my.min.js')}}"></script>
 <script type = "text/javascript" src="{{url_for('static',filename='my.doc.js')}}"></script>
-
 <script>
-//$('button[name=showButton]').click(function() {
-//    var year = $('select[name="searchYear"]').val();
-//    var month =  $('select[name="searchMonth"]').val();
-//    var week = $('select[name="searchWeek"]').val();
-//    $.ajax({
-//        type: 'GET',
-//        url: "/timesheets/?year=" + year +"/month="+month+"/week="+ week,
-//        contentType: "application/json",
-//    });
-//});
+
+$('button[name=createButton]').click(function() {
+    $.ajax({
+        type: 'POST',
+        url: '/on_create',
+        dataType: 'json',
+        data: JSON.stringify({ year: $('select[name="searchYear"]').val(),
+                               month: $('select[name="searchMonth"]').val(),
+                               week: $('select[name="searchWeek"]').val() }),
+        contentType: "application/json"
+    });
+});
+
+
+$('button[name=saveButton]').click(function() {
+    var d_id = document.getElementsByName("date_id");
+    var start = document.getElementsByName("start_time");
+    var lunch = document.getElementsByName("lunch_duration");
+    var end = document.getElementsByName("end_time");
+    var worked = document.getElementsByName("worked_time");
+    var note = document.getElementById("notes").value;
+    var d = {};
+    var i;
+    for (i = 0; i < start.length; i++) {
+        d[d_id[i].value] = {};
+        d[d_id[i].value]["start"] =  start[i].value;
+        d[d_id[i].value]["lunch"] =  lunch[i].value;
+        d[d_id[i].value]["end"] =  end[i].value;
+        d[d_id[i].value]["worked"] =  worked[i].value;
+    }
+    $.ajax({
+        type: 'POST',
+        url: '/on_save',
+        dataType: 'json',
+        data: JSON.stringify({data:d,notes:note}),
+        contentType: "application/json"
+    });
+});
 
 
 </script>
-
 {% endblock %}

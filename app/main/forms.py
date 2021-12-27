@@ -26,7 +26,7 @@ class SelectForm(FlaskForm):
             last_date = Time_dimension.query.filter_by(year=today.year, month=today.month, week=w.week, weekend_flag='f') \
                 .order_by(desc(Time_dimension.db_date)).first()
             if not first_date is None and not last_date is None:
-                date_period = first_date.db_date.strftime("%m/%d/%Y") + ' - ' + last_date.db_date.strftime("%m/%d/%Y")
+                date_period = first_date.db_date.strftime("%d/%m/%Y") + ' - ' + last_date.db_date.strftime("%d/%m/%Y")
                 weeks[w.week] = date_period
         self.searchWeek.choices = [(k, v) for k,v in weeks.items()]
 
@@ -40,6 +40,6 @@ class SelectForm(FlaskForm):
             last_date = Time_dimension.query.filter_by(year=year, month=month, week=w.week, weekend_flag='f') \
                 .order_by(desc(Time_dimension.db_date)).first()
             if not first_date is None and not last_date is None:
-                date_period = first_date.db_date.strftime("%m/%d/%Y") + ' - ' + last_date.db_date.strftime("%m/%d/%Y")
+                date_period = first_date.db_date.strftime("%d/%m/%Y") + ' - ' + last_date.db_date.strftime("%d/%m/%Y")
                 weeks[w.week] = date_period
         self.searchWeek.choices = [(k, v) for k,v in weeks.items()]

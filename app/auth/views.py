@@ -3,7 +3,7 @@ from flask_login import login_user,login_required,logout_user,current_user
 from . import auth
 from .forms import LoginForm,RegisterForm
 from .. import db
-from .. models import User,Work,Time_dimension
+from .. models import User
 from ..email import send_mail
 
 
