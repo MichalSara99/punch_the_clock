@@ -5,10 +5,12 @@ $(document).ready(function(){
         lunch_val_str = 'input[id="lunch_'+unique_id+'"]';
         end_val_str = 'input[id="end_'+unique_id+'"]';
         worked_val_str = 'input[id="worked_'+unique_id+'"]';
+        over_val_str = 'input[id="overtime_'+unique_id+'"]';
         start_val = $(start_val_str).val();
         lunch_val = $(lunch_val_str).val();
         end_val = $(end_val_str).val();
         worked_val = $(worked_val_str).val();
+        over_val = $(over_val_str).val();
 
         $.ajax({
                 type: 'POST',
@@ -17,12 +19,14 @@ $(document).ready(function(){
                                     start: start_val,
                                     lunch:lunch_val,
                                     end:end_val,
-                                    worked:worked_val}),
+                                    worked:worked_val,
+                                    overtime:over_val }),
                 contentType: "application/json",
                 dataType: "json",
                 success: function(data){
                     data = JSON.parse(data);
-                    $(worked_val_str).val(data.worked)
+                    $(worked_val_str).val(data.worked);
+                    $(over_val_str).val(data.overtime);
                 },
                 dataType: 'html'
         });
@@ -36,10 +40,12 @@ $(document).ready(function(){
         lunch_val_str = 'input[id="lunch_'+unique_id+'"]';
         end_val_str = 'input[id="end_'+unique_id+'"]';
         worked_val_str = 'input[id="worked_'+unique_id+'"]';
+        over_val_str = 'input[id="overtime_'+unique_id+'"]';
         start_val = $(start_val_str).val();
         lunch_val = $(lunch_val_str).val();
         end_val = $(end_val_str).val();
         worked_val = $(worked_val_str).val();
+        over_val = $(over_val_str).val();
 
         $.ajax({
                 type: 'POST',
@@ -48,12 +54,14 @@ $(document).ready(function(){
                                     start: start_val,
                                     lunch:lunch_val,
                                     end:end_val,
-                                    worked:worked_val}),
+                                    worked:worked_val,
+                                    overtime:over_val}),
                 contentType: "application/json",
                 dataType: "json",
                 success: function(data){
                     data = JSON.parse(data);
-                    $(worked_val_str).val(data.worked)
+                    $(worked_val_str).val(data.worked);
+                    $(over_val_str).val(data.overtime);
                 },
                 dataType: 'html'
         });
@@ -65,10 +73,12 @@ $(document).ready(function(){
         lunch_val_str = 'input[id="lunch_'+unique_id+'"]';
         end_val_str = 'input[id="end_'+unique_id+'"]';
         worked_val_str = 'input[id="worked_'+unique_id+'"]';
+        over_val_str = 'input[id="overtime_'+unique_id+'"]';
         start_val = $(start_val_str).val();
         lunch_val = $(lunch_val_str).val();
         end_val = $(end_val_str).val();
         worked_val = $(worked_val_str).val();
+        over_val = $(over_val_str).val();
 
         $.ajax({
                 type: 'POST',
@@ -77,12 +87,14 @@ $(document).ready(function(){
                                     start: start_val,
                                     lunch:lunch_val,
                                     end:end_val,
-                                    worked:worked_val}),
+                                    worked:worked_val,
+                                    overtime:over_val}),
                 contentType: "application/json",
                 dataType: "json",
                 success: function(data){
                     data = JSON.parse(data);
-                    $(worked_val_str).val(data.worked)
+                    $(worked_val_str).val(data.worked);
+                    $(over_val_str).val(data.overtime);
                 },
                 dataType: 'html'
         });

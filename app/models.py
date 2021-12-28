@@ -14,6 +14,7 @@ from datetime import datetime,time
 from sqlalchemy.pool import QueuePool
 
 
+
 class Time_dimension(db.Model):
     __tablename__ = 'time_dimension'
     id = db.Column(db.Integer, primary_key=True)
@@ -82,7 +83,7 @@ class Work(db.Model):
     lunch_duration = db.Column(db.DateTime)
     end_time = db.Column(db.DateTime)
     worked_time = db.Column(db.DateTime)
-
+    overtime = db.Column(db.DateTime)
 
 class Work_notes(db.Model):
     __tablename__ = 'work_notes'

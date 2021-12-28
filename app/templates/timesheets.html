@@ -44,6 +44,7 @@
         <th data-sortable="false">Lunch Duration</th>
         <th data-sortable="false">End Time</th>
         <th data-sortable="false">Worked</th>
+        <th data-sortable="false">Overtime</th>
     </tr>
     </thead>
    <tbody>
@@ -55,6 +56,7 @@
             <td><input type="time" id = "lunch_{{tpl[0]}}" name="lunch_duration" value="{{tpl[4]|formatTimedelta}}"></td>
             <td><input type="time" id = "end_{{tpl[0]}}" name="end_time" value="{{tpl[5]|formatTimedelta}}"></td>
             <td><input type="time" id = "worked_{{tpl[0]}}" name="worked_time" value="{{tpl[6]|formatTimedelta}}" disabled></td>
+            <td><input type="text"  size="6" id = "overtime_{{tpl[0]}}" name="overtime" value="{{tpl[7]|formatTimedelta}}" disabled></td>
         </tr>
         {% endfor %}
         </tbody>
@@ -104,6 +106,7 @@ $('button[name=saveButton]').click(function() {
     var lunch = document.getElementsByName("lunch_duration");
     var end = document.getElementsByName("end_time");
     var worked = document.getElementsByName("worked_time");
+    var over = document.getElementsByName("overtime");
     var note = document.getElementById("notes").value;
     var d = {};
     var i;
@@ -113,6 +116,7 @@ $('button[name=saveButton]').click(function() {
         d[d_id[i].value]["lunch"] =  lunch[i].value;
         d[d_id[i].value]["end"] =  end[i].value;
         d[d_id[i].value]["worked"] =  worked[i].value;
+        d[d_id[i].value]["over"] =  over[i].value;
     }
     $.ajax({
         type: 'POST',

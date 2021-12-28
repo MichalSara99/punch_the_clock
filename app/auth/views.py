@@ -3,7 +3,7 @@ from flask_login import login_user,login_required,logout_user,current_user
 from . import auth
 from .forms import LoginForm,RegisterForm
 from .. import db
-from .. models import User
+from .. models import User,User_settings
 from ..email import send_mail
 
 
@@ -41,7 +41,6 @@ def register():
                     password = reg_form.password.data)
         db.session.add(user)
         db.session.commit()
-        #TIP: create a default record in User_settings table as well
         token = user.generate_confirmation_token()
         send_mail(user.email,'Confirm Your Account',
                   'auth/email/confirm',user = user,token=token)
@@ -57,6 +56,10 @@ def confirm(token):
     if current_user.confirmed == 'Y':
         return redirect(url_for('main.index'))
     if current_user.confirm(token):
+        db.session.commit()
+        user_settings = User_settings(user_id = current_user.id,
+                                      working_time = '08:00:00')
+        db.session.add(user_settings)
         db.session.commit()
         flash('You have confirmed your account. Thanks!')
     else:

@@ -5,8 +5,8 @@ from sqlalchemy import desc,asc
 from . import main
 from .. import db
 import json
-from .. models import User,Work,Work_notes,Time_dimension
-from datetime import datetime,time
+from .. models import User,User_settings,Work,Work_notes,Time_dimension
+from datetime import datetime,time,timedelta
 from .forms import SelectForm
 
 
@@ -21,7 +21,8 @@ def timesheet(year,month,week,user_id):
                            Work.start_time,
                            Work.lunch_duration,
                            Work.end_time,
-                           Work.worked_time). \
+                           Work.worked_time,
+                           Work.overtime). \
         join(Work, Time_dimension.id == Work.td_id). \
         filter(Time_dimension.year == year,
                Time_dimension.month == month,
@@ -43,6 +44,13 @@ def notes(year,month,week,user_id):
     if len(nts) <= 0:
         return ''
     return nts[0][1]
+
+def format_timedelta(td):
+    d = datetime(1900, 1, 1)
+    if td < timedelta(0):
+        return '-' + format_timedelta(-td)
+    else:
+        return (d + td).strftime("%H:%M")
 
 
 @main.route('/timesheets',methods=['POST','GET'])
@@ -92,6 +100,7 @@ def on_save():
             w.lunch_duration = d[td_id_str]['lunch']
             w.end_time = d[td_id_str]['end']
             w.worked_time = d[td_id_str]['worked']
+            w.overtime = d[td_id_str]['over']
             db.session.merge(w)
             db.session.flush()
             db.session.commit()
@@ -109,7 +118,6 @@ def on_save():
         return redirect(next)
 
 
-
 @main.route('/on_create',methods=['POST','GET'])
 def on_create():
     if request.method == "POST":
@@ -124,7 +132,8 @@ def on_create():
                         start_time = '00:00:00',
                         lunch_duration = '00:00:00',
                         end_time = '00:00:00',
-                        worked_time = '00:00:00')
+                        worked_time = '00:00:00',
+                        overtime = '00:00:00')
             db.session.add(work)
             db.session.commit()
         work_notes = Work_notes(user_id = current_user.id,
@@ -174,16 +183,23 @@ def calculate_time():
         start = datetime.strptime(data_sent['start'], '%H:%M')
         lunch = datetime.strptime(data_sent['lunch'],'%H:%M')
         end = datetime.strptime(data_sent['end'], '%H:%M')
-        worked = datetime.strptime(data_sent['worked'], '%H:%M')
+        worked = data_sent['worked']
+        over_orig = data_sent['overtime']
+        wt = User_settings.query.filter_by(user_id = current_user.id).first()
+        limit = wt.working_time
         end_lunch = d + (end-lunch)
         diff_days = (end_lunch - start).days
         sent_back['id'] = id
         if diff_days < 0:
             sent_back['worked'] = worked.strftime("%H:%M")
+            sent_back['overtime'] = over_orig
             sent_back['message'] = 'Start Time must be lower than End Time minus Lunch Duration'
         else:
-            sent_back['worked'] = (d + (end_lunch - start)).strftime("%H:%M")
+            diff = (end_lunch - start)
+            sent_back['worked'] = (d + diff).strftime("%H:%M")
+            sent_back['overtime'] = format_timedelta(diff-limit)
             sent_back['message'] = 'OK'
+        print(sent_back)
     return jsonify(sent_back)
 
 
