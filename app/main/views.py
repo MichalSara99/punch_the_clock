@@ -7,7 +7,7 @@ from .. import db
 import json
 from .. models import User,User_settings,Work,Work_notes,Time_dimension
 from datetime import datetime,time,timedelta
-from .forms import SelectForm
+from .forms import SelectForm,SettingsForm
 
 
 @main.route('/')
@@ -191,7 +191,7 @@ def calculate_time():
         diff_days = (end_lunch - start).days
         sent_back['id'] = id
         if diff_days < 0:
-            sent_back['worked'] = worked.strftime("%H:%M")
+            sent_back['worked'] = worked
             sent_back['overtime'] = over_orig
             sent_back['message'] = 'Start Time must be lower than End Time minus Lunch Duration'
         else:
@@ -204,9 +204,25 @@ def calculate_time():
 
 
 
-@main.route('/settings')
+@main.route('/settings',methods=['GET','POST'])
 def settings():
-    return render_template('settings.html')
+    form = SettingsForm()
+    if form.validate_on_submit():
+        us = User_settings(user_id = current_user.id,
+                           working_time = form.workingTime.data)
+        db.session.merge(us)
+        db.session.flush()
+        db.session.commit()
+        next = url_for('main.settings')
+        flash('Settings have been saved')
+        return redirect(next)
+    wt = User_settings.query.filter_by(user_id=current_user.id).first()
+    form.workingTime.data = (datetime(1900, 1, 1) + wt.working_time)
+    return render_template('settings.html',form=form)
+
+@main.route('/history')
+def history():
+    return render_template('history.html')
 
 
 @main.route('/about')

@@ -37,11 +37,10 @@ data-toggle="collapse" data-target=".navbar-collapse">
     <li><a href="{{url_for('auth.register')}}">Register</a></li>
     {% if current_user.is_authenticated %}
     <li><a href="{{url_for('main.timesheets')}}">Timesheets</a></li>
-    {% endif %}
-    {% if current_user.is_authenticated %}
+    <li><a href="{{url_for('main.history')}}">History</a></li>
     <li><a href="{{url_for('main.settings')}}">Settings</a></li>
-    <li><a href="{{url_for('main.about')}}">About</a></li>
     {% endif %}
+    <li><a href="{{url_for('main.about')}}">About</a></li>
 </ul>
     <ul class="nav navbar-nav navbar-right">
     {% if current_user.is_authenticated %}

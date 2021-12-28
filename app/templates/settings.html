@@ -8,21 +8,23 @@
 <h1>Settings</h1>
 </div>
 
+<!--<input type="time" id = "workingTimeId" name="workingTime" value="00:00:00">-->
 <div>
     <h3>Timesheets</h3>
 
     <form method="POST">
+        {{ form.hidden_tag() }}
         <table class="table table-sm">
            <tbody>
                 <tr>
                     <td><p class="fw-bold">Working time</p></td>
-                    <td><input type="time" id = "workingTimeId" name="workingTime" value="00:00:00"></td>
+                    <td>{{form.workingTime()}}</td>
                 </tr>
            </tbody>
         </table><br/><br/>
         <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
          <div class="text-right"> <!--You can add col-lg-12 if you want -->
-        <button id="saveSettings" name="saveButton" class="btn btn-info">Save</button>
+           {{form.settingsSubmit(class="btn btn-info")}}
         </div>
     </form>
 </div>

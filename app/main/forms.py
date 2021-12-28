@@ -1,8 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField,SelectField
+from wtforms import SubmitField,SelectField,TimeField
 from datetime import datetime
 from sqlalchemy import desc,asc
 from ..models import Time_dimension
+
+
+class SettingsForm(FlaskForm):
+    workingTime = TimeField("",default=datetime(1900,1,1,8,0,0))
+    settingsSubmit = SubmitField("Save")
 
 
 class SelectForm(FlaskForm):
