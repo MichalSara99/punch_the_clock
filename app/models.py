@@ -66,6 +66,13 @@ class User(UserMixin,db.Model):
         return True
 
 
+class User_settings(db.Model):
+    __tablename__ = 'user_settings'
+    id = db.Column(db.Integer,primary_key = True)
+    user_id = db.Column(db.Integer,unique = True)
+    working_time = db.Column(db.DateTime)
+
+
 class Work(db.Model):
     __tablename__ = 'work'
     id = db.Column(db.Integer,primary_key = True)

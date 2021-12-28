@@ -38,8 +38,8 @@ data-toggle="collapse" data-target=".navbar-collapse">
     {% if current_user.is_authenticated %}
     <li><a href="{{url_for('main.timesheets')}}">Timesheets</a></li>
     {% endif %}
-    <li><a href="/">Settings</a></li>
     {% if current_user.is_authenticated %}
+    <li><a href="{{url_for('main.settings')}}">Settings</a></li>
     <li><a href="{{url_for('main.about')}}">About</a></li>
     {% endif %}
 </ul>

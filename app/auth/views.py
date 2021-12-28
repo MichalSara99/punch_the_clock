@@ -13,7 +13,7 @@ def login():
     if log_form.validate_on_submit():
         user = User.query.filter_by(email=log_form.email.data).first()
         # fist check if the user is in the database:
-        if user is not None: #and user.verify_passwrd(log_form.password.data):
+        if user is not None and user.verify_password(log_form.password.data):
             login_user(user,log_form.remember_me.data)
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
@@ -41,6 +41,7 @@ def register():
                     password = reg_form.password.data)
         db.session.add(user)
         db.session.commit()
+        #TIP: create a default record in User_settings table as well
         token = user.generate_confirmation_token()
         send_mail(user.email,'Confirm Your Account',
                   'auth/email/confirm',user = user,token=token)

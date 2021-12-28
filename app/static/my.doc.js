@@ -24,9 +24,6 @@ $(document).ready(function(){
                     data = JSON.parse(data);
                     $(worked_val_str).val(data.worked)
                 },
-                failure: function () {
-                        alert("Failed!");
-                },
                 dataType: 'html'
         });
     });
@@ -58,9 +55,6 @@ $(document).ready(function(){
                     data = JSON.parse(data);
                     $(worked_val_str).val(data.worked)
                 },
-                failure: function () {
-                        alert("Failed!");
-                },
                 dataType: 'html'
         });
     });
@@ -89,9 +83,6 @@ $(document).ready(function(){
                 success: function(data){
                     data = JSON.parse(data);
                     $(worked_val_str).val(data.worked)
-                },
-                failure: function () {
-                        alert("Failed!");
                 },
                 dataType: 'html'
         });

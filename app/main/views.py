@@ -81,7 +81,6 @@ def timesheets(year = None,month=None,week=None):
 def on_save():
     if request.method == "POST":
         data_sent = request.get_json()
-        print(data_sent)
         d = data_sent['data']
         n = data_sent['notes']
         works = [Work.query.filter_by(user_id=current_user.id,td_id = k).one() for k in d.keys()]
@@ -133,7 +132,6 @@ def on_create():
                                notes='')
         db.session.add(work_notes)
         db.session.commit()
-        print(data_sent)
         next = url_for('main.timesheets',
                        year=int(data_sent['year']),
                        month = int(data_sent['month']),
@@ -172,7 +170,6 @@ def calculate_time():
     if request.method == "POST":
         d = datetime(1900, 1, 1)
         data_sent = request.get_json()
-        print(data_sent)
         id = data_sent['id']
         start = datetime.strptime(data_sent['start'], '%H:%M')
         lunch = datetime.strptime(data_sent['lunch'],'%H:%M')
@@ -187,8 +184,13 @@ def calculate_time():
         else:
             sent_back['worked'] = (d + (end_lunch - start)).strftime("%H:%M")
             sent_back['message'] = 'OK'
-        print(sent_back)
     return jsonify(sent_back)
+
+
+
+@main.route('/settings')
+def settings():
+    return render_template('settings.html')
 
 
 @main.route('/about')
