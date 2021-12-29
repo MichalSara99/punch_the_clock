@@ -1,17 +1,9 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask import current_app
-from sqlalchemy import desc,asc
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String,DateTime,ForeignKey,Numeric
 from app import db
 from . import login_manager
-from datetime import datetime,time
-from sqlalchemy.pool import QueuePool
 
 
 

@@ -19,3 +19,17 @@ def formatTimedelta(delta):
 
     time_fmt = f"{hours:02d}:{minutes:02d}"
     return time_fmt
+
+@main.app_template_filter()
+def formatTotalTimedelta(delta):
+    """Formats a timedelta duration to %H:%M:%S format"""
+    if delta < timedelta(0):
+        return '-' + formatTimedelta(-delta)
+    else:
+        seconds = int(delta.total_seconds())
+
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+
+    time_fmt = f"{hours:02d}:{minutes:02d}"
+    return time_fmt

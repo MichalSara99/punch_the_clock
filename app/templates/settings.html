@@ -8,13 +8,16 @@
 <h1>Settings</h1>
 </div>
 
-<!--<input type="time" id = "workingTimeId" name="workingTime" value="00:00:00">-->
 <div>
     <h3>Timesheets</h3>
 
     <form method="POST">
         {{ form.hidden_tag() }}
         <table class="table table-sm">
+            <colgroup>
+                <col span="1" style="width: 85.5%;">
+                <col span="1" style="width: 14.5%;">
+            </colgroup>
            <tbody>
                 <tr>
                     <td><p class="fw-bold">Working time</p></td>
@@ -23,7 +26,7 @@
            </tbody>
         </table><br/><br/>
         <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
-         <div class="text-right"> <!--You can add col-lg-12 if you want -->
+         <div class="text-right">
            {{form.settingsSubmit(class="btn btn-info")}}
         </div>
     </form>

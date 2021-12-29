@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
+{% block additional_links %}
+    <link rel="stylesheet" href="{{url_for('static',filename='table-all.css')}}"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static',filename='bootstrap-table.min.css')}}">
+{% endblock %}
+
+
 {% block title %} Punch The Clock! - History {% endblock %}
 
 
@@ -7,8 +14,76 @@
 <div class="page-header">
 <h1>History</h1>
 </div>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="input-group">
+        <span class="input-group-addon" title="* Year" id="yearSelect">Year</span>
+        {{ form.historyYear(id='yearSelect' ,class='form-control') }}
+        <span class="input-group-addon" title="* Month" id="monthSelect">Month</span>
+        {{ form.historyMonth(id='monthSelect'  ,class='form-control') }}
+        <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+        {{ form.historySubmit(id='showSubmit' ,class='form-control') }}
+    </div>
+</form><br/><br/>
+<div>
+    <table class="table table-sm">
+        <colgroup>
+            <col span="1" style="width: 85.5%;">
+            <col span="1" style="width: 14.5%;">
+        </colgroup>
+        <tbody>
+        <tr>
+            <td><p class="fw-bold">Total Worked</p></td>
+            <td><input type="text"  size="6" id = "total_worked" name="totalwork" value="{{info['tw']|formatTotalTimedelta}}" disabled></td>
+        </tr>
+        <tr>
+            <td><p class="fw-bold">Total Overtime</p></td>
+            <td><input type="text"  size="6" id = "total_overtime" name="totalovertime" value="{{info['to']|formatTotalTimedelta}}" disabled></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+<table id="my_table_1" data-toggle="table" data-sort-stable="true" >
+    <thead>
+    <tr>
+        <th data-sortable="false">Date</th>
+        <th data-sortable="false">Weekday</th>
+        <th data-sortable="false">Start Time</th>
+        <th data-sortable="false">Lunch Duration</th>
+        <th data-sortable="false">End Time</th>
+        <th data-sortable="false">Worked</th>
+        <th data-sortable="false">Overtime</th>
+    </tr>
+    </thead>
+   <tbody>
+        {% for tpl in history_table %}
+        <tr>
+            <td><input type="hidden" name="date_id" value="{{tpl[0]}}">{{tpl[1].strftime('%d-%m-%Y')}}</td>
+            <td>{{tpl[2]}}</td>
+            <td><input type="time" id = "start_{{tpl[0]}}" name="start_time" value="{{tpl[3]|formatTimedelta}}" disabled></td>
+            <td><input type="time" id = "lunch_{{tpl[0]}}" name="lunch_duration" value="{{tpl[4]|formatTimedelta}}" disabled></td>
+            <td><input type="time" id = "end_{{tpl[0]}}" name="end_time" value="{{tpl[5]|formatTimedelta}}" disabled></td>
+            <td><input type="time" id = "worked_{{tpl[0]}}" name="worked_time" value="{{tpl[6]|formatTimedelta}}" disabled></td>
+            <td><input type="text"  size="6" id = "overtime_{{tpl[0]}}" name="overtime" value="{{tpl[7]|formatTimedelta}}" disabled></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+</table><br/><br/>
+</div>
 
 <div>
-TBC...
+
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{url_for('static',filename='popper.min.js')}}"
+         crossorigin="anonymous"></script>
+<script src="{{url_for('static',filename='bootstrap.min.js')}}"
+            crossorigin="anonymous"></script>
+<script src="{{url_for('static',filename='bootstrap-table.min.js')}}"></script>
+
+
 {% endblock %}

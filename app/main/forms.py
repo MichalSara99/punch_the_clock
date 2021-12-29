@@ -10,6 +10,18 @@ class SettingsForm(FlaskForm):
     settingsSubmit = SubmitField("Save")
 
 
+class HistoryForm(FlaskForm):
+    historyYear = SelectField("",coerce=int,default=datetime.now().year)
+    historyMonth = SelectField("",coerce=int,default=datetime.now().month)
+    historySubmit = SubmitField("Show")
+
+    def __init__(self, *args, **kwargs):
+        super(HistoryForm, self).__init__(*args,**kwargs)
+        self.historyYear.choices = [(td.year,td.year) for td in Time_dimension.query.group_by(Time_dimension.year).all()]
+        self.historyMonth.choices = [(td.month, td.month_name) for td in
+                                   Time_dimension.query.group_by(Time_dimension.month, Time_dimension.month_name).all()]
+
+
 class SelectForm(FlaskForm):
     searchYear = SelectField("",coerce=int,default=datetime.now().year)
     searchMonth = SelectField("",coerce=int,default=datetime.now().month)

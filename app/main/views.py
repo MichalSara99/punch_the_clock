@@ -1,18 +1,13 @@
-# FLASK related imports
 from flask import render_template,request,jsonify,flash,redirect,url_for
 from flask_login import current_user
-from sqlalchemy import desc,asc
+from sqlalchemy import desc,asc,func
 from . import main
 from .. import db
-import json
-from .. models import User,User_settings,Work,Work_notes,Time_dimension
-from datetime import datetime,time,timedelta
-from .forms import SelectForm,SettingsForm
+from .. models import User_settings,Work,Work_notes,Time_dimension
+from datetime import datetime,timedelta
+from .forms import SelectForm,SettingsForm,HistoryForm
 
 
-@main.route('/')
-def index():
-    return render_template('index.html')
 
 def timesheet(year,month,week,user_id):
     tms = db.session.query(Time_dimension.id,
@@ -31,6 +26,37 @@ def timesheet(year,month,week,user_id):
                Time_dimension.weekend_flag == 'f'). \
         order_by(asc(Time_dimension.id)).all()
     return tms
+
+def historysheet(year,month,user_id):
+    tms = db.session.query(Time_dimension.id,
+                           Time_dimension.db_date,
+                           Time_dimension.day_name,
+                           Work.start_time,
+                           Work.lunch_duration,
+                           Work.end_time,
+                           Work.worked_time,
+                           Work.overtime). \
+        join(Work, Time_dimension.id == Work.td_id). \
+        filter(Time_dimension.year == year,
+               Time_dimension.month == month,
+               Work.user_id == user_id,
+               Time_dimension.weekend_flag == 'f'). \
+        order_by(asc(Time_dimension.id)).all()
+    return tms
+
+def history_summary(year,month,user_id):
+    hs = db.session.query(Time_dimension.id,
+                           func.sec_to_time(func.sum(func.time_to_sec(Work.worked_time))),
+                           func.sec_to_time(func.sum(func.time_to_sec(Work.overtime)))). \
+        join(Work, Time_dimension.id == Work.td_id). \
+        filter(Time_dimension.year == year,
+               Time_dimension.month == month,
+               Work.user_id == user_id,
+               Time_dimension.weekend_flag == 'f'). \
+        order_by(asc(Time_dimension.id)).all()
+    if hs[0][0] is None:
+        return {'tw':timedelta(0),'to':timedelta(0)}
+    return {'tw':hs[0][1],'to':hs[0][2]}
 
 def notes(year,month,week,user_id):
     nts = db.session.query(Time_dimension.id,Work_notes.notes). \
@@ -52,6 +78,12 @@ def format_timedelta(td):
     else:
         return (d + td).strftime("%H:%M")
 
+
+#################################### VIEW FUNCS #################################
+
+@main.route('/')
+def index():
+    return render_template('index.html')
 
 @main.route('/timesheets',methods=['POST','GET'])
 @main.route('/timesheets/<int:year>/<int:month>/<int:week>',methods=['POST','GET'])
@@ -199,7 +231,6 @@ def calculate_time():
             sent_back['worked'] = (d + diff).strftime("%H:%M")
             sent_back['overtime'] = format_timedelta(diff-limit)
             sent_back['message'] = 'OK'
-        print(sent_back)
     return jsonify(sent_back)
 
 
@@ -220,9 +251,29 @@ def settings():
     form.workingTime.data = (datetime(1900, 1, 1) + wt.working_time)
     return render_template('settings.html',form=form)
 
-@main.route('/history')
-def history():
-    return render_template('history.html')
+
+@main.route('/history',methods=['GET','POST'])
+@main.route('/history/<int:year>/<int:month>',methods=['GET','POST'])
+def history(year=None,month=None):
+    form = HistoryForm()
+    if request.method == 'POST':
+        next = url_for('main.history',
+                       year=int(form.historyYear.data),
+                       month = int(form.historyMonth.data))
+        return redirect(next)
+    if year is not None and month is not None:
+        form.historyYear.data = year
+        form.historyMonth.data = month
+        hs = historysheet(year,month,current_user.id)
+        info = history_summary(year,month,current_user.id)
+    else:
+        hs = historysheet(int(form.historyYear.data),int(form.historyMonth.data),
+                          current_user.id)
+        info = history_summary(int(form.historyYear.data),int(form.historyMonth.data),
+                               current_user.id)
+    return render_template('history.html',form=form,
+                           history_table=hs,info=info)
+
 
 
 @main.route('/about')
