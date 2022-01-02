@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField,SelectField,TimeField
-from datetime import datetime
+from datetime import datetime,timedelta
 from sqlalchemy import desc,asc
 from ..models import Time_dimension
 
@@ -21,11 +21,22 @@ class HistoryForm(FlaskForm):
         self.historyMonth.choices = [(td.month, td.month_name) for td in
                                    Time_dimension.query.group_by(Time_dimension.month, Time_dimension.month_name).all()]
 
+def get_propper_week():
+    today = datetime.now()
+    w = today.isocalendar()
+    if w[2] == 6:
+        next_day = today + timedelta(days=2)
+        return next_day.isocalendar()[1]
+    elif w[2] == 7:
+        next_day = today + timedelta(days=1)
+        return next_day.isocalendar()[1]
+    return w[1]
+
 
 class SelectForm(FlaskForm):
     searchYear = SelectField("",coerce=int,default=datetime.now().year)
     searchMonth = SelectField("",coerce=int,default=datetime.now().month)
-    searchWeek = SelectField("",coerce=int,default=datetime.now().isocalendar()[1])
+    searchWeek = SelectField("",coerce=int,default=get_propper_week())
     searchSubmit = SubmitField("Show")
 
     def __init__(self, *args, **kwargs):
