@@ -239,8 +239,9 @@ def calculate_time():
 def settings():
     form = SettingsForm()
     if form.validate_on_submit():
-        us = User_settings(user_id = current_user.id,
-                           working_time = form.workingTime.data)
+        us = User_settings.query.filter_by(user_id=current_user.id).first()
+        us.user_id = current_user.id
+        us.working_time = form.workingTime.data
         db.session.merge(us)
         db.session.flush()
         db.session.commit()
