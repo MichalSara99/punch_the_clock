@@ -1,0 +1,259 @@
+# Czech translations for PROJECT.
+# Copyright (C) 2022 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2022-01-07 01:05+0100\n"
+"PO-Revision-Date: 2022-01-07 00:33+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: cs\n"
+"Language-Team: cs <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: app/auth/forms.py:10 app/auth/forms.py:20
+msgid "Email:"
+msgstr "Email:"
+
+#: app/auth/forms.py:13 app/auth/forms.py:29
+msgid "Password:"
+msgstr "Heslo:"
+
+#: app/auth/forms.py:16
+msgid "Keep me logged in"
+msgstr "Pamatuj si mě"
+
+#: app/auth/forms.py:17 app/templates/base.html:49
+msgid "Log In"
+msgstr "Přihlásit"
+
+#: app/auth/forms.py:23
+msgid "Username:"
+msgstr "Uživatelské jméno:"
+
+#: app/auth/forms.py:27
+msgid "Usernames must have only letters, numbers, dots or underscores"
+msgstr ""
+"Uživatelské jméno musí obsahovat pouze písmena, čísla, tečky nebo "
+"podtržítka"
+
+#: app/auth/forms.py:34
+msgid "Confirm password:"
+msgstr "Potvrzení hesla:"
+
+#: app/auth/forms.py:37 app/templates/auth/register.html:4
+#: app/templates/auth/register.html:9 app/templates/base.html:37
+msgid "Register"
+msgstr "Registrace"
+
+#: app/auth/views.py:23
+msgid "Invalid email or password"
+msgstr "Špatný email nebo heslo"
+
+#: app/auth/views.py:31
+msgid "You have been logged out."
+msgstr "Právě jste byli odhlášeni."
+
+#: app/auth/views.py:46 app/auth/views.py:88
+msgid "Confirm Your Account"
+msgstr "Potvrďte Váš účet"
+
+#: app/auth/views.py:48
+msgid "A confirmation email has been sent to you by email."
+msgstr "Potvrzující email byl zaslán na Váš email."
+
+#: app/auth/views.py:65
+msgid "You have confirmed your account. Thanks!"
+msgstr "Právě jste potvrdili svůj účet. Děkujeme!"
+
+#: app/auth/views.py:67
+msgid "The confirmation link is invalid or has expired."
+msgstr "Potvrzující odkaz není validní nebo již vypršel."
+
+#: app/auth/views.py:90
+msgid "A new confirmation email has been sent to your email."
+msgstr "Nový potvrzující email Vám byl zaslán."
+
+#: app/main/forms.py:11 app/templates/timesheets.html:70
+msgid "Save"
+msgstr "Uložit"
+
+#: app/main/forms.py:17 app/main/forms.py:41
+msgid "Show"
+msgstr "Ukázat"
+
+#: app/main/views.py:150
+msgid "Changes have been saved."
+msgstr "Změny byly uloženy."
+
+#: app/main/views.py:181
+msgid "New week has been added."
+msgstr "Nový týden byl přidán."
+
+#: app/main/views.py:250
+msgid "Settings have been saved"
+msgstr "Nastavení bylo uloženo."
+
+#: app/templates/404.html:3
+msgid "Page Not Found"
+msgstr "Stránka nenalezena"
+
+#: app/templates/404.html:8
+msgid "Not Found"
+msgstr "Nenalezeno"
+
+#: app/templates/500.html:3 app/templates/500.html:8
+msgid "Internal Server Error"
+msgstr "Vnitřní chyba serveru"
+
+#: app/templates/about.html:3 app/templates/base.html:43
+msgid "About"
+msgstr "O aplikaci"
+
+#: app/templates/about.html:8
+msgid "Author"
+msgstr "Autor"
+
+#: app/templates/about.html:13
+msgid "Dedication"
+msgstr "Věnování"
+
+#: app/templates/about.html:15
+msgid "(my mom)"
+msgstr "(moje máma)"
+
+#: app/templates/base.html:33
+msgid "Home"
+msgstr "Domů"
+
+#: app/templates/base.html:39 app/templates/settings.html:12
+msgid "Timesheets"
+msgstr "Rozvrh"
+
+#: app/templates/base.html:40 app/templates/history.html:10
+#: app/templates/history.html:15
+msgid "History"
+msgstr "Historie"
+
+#: app/templates/base.html:41 app/templates/settings.html:3
+#: app/templates/settings.html:8
+msgid "Settings"
+msgstr "Nastavení"
+
+#: app/templates/base.html:47
+msgid "Log Out"
+msgstr "Odhlásit"
+
+#: app/templates/history.html:20 app/templates/timesheets.html:19
+msgid "Year"
+msgstr "Rok"
+
+#: app/templates/history.html:22 app/templates/timesheets.html:21
+msgid "Month"
+msgstr "Měsíc"
+
+#: app/templates/history.html:36
+msgid "Total Worked"
+msgstr "Celkově odpracováno"
+
+#: app/templates/history.html:40
+msgid "Total Overtime"
+msgstr "Celkový přesčas"
+
+#: app/templates/history.html:50 app/templates/timesheets.html:40
+msgid "Date"
+msgstr "Datum"
+
+#: app/templates/history.html:51 app/templates/timesheets.html:41
+msgid "Weekday"
+msgstr "Den"
+
+#: app/templates/history.html:52 app/templates/timesheets.html:42
+msgid "Start Time"
+msgstr "Start"
+
+#: app/templates/history.html:53 app/templates/timesheets.html:43
+msgid "Lunch Duration"
+msgstr "Polední přestávka"
+
+#: app/templates/history.html:54 app/templates/timesheets.html:44
+msgid "End Time"
+msgstr "Konec"
+
+#: app/templates/history.html:55 app/templates/timesheets.html:45
+msgid "Worked"
+msgstr "Odpracováno"
+
+#: app/templates/history.html:56 app/templates/timesheets.html:46
+msgid "Overtime"
+msgstr "Přesčas"
+
+#: app/templates/auth/unconfirmed.html:8 app/templates/index.html:9
+msgid "Hello"
+msgstr "Ahoj"
+
+#: app/templates/index.html:13
+msgid "Stranger"
+msgstr "Cizinče"
+
+#: app/templates/settings.html:23
+msgid "Working time"
+msgstr "Pracovní doba"
+
+#: app/templates/timesheets.html:10
+msgid "TimeSheets"
+msgstr "Rozvrh"
+
+#: app/templates/timesheets.html:23
+msgid "Week"
+msgstr "Týden"
+
+#: app/templates/timesheets.html:29
+msgid "Create"
+msgstr "Vytvořit"
+
+#: app/templates/timesheets.html:64
+msgid "Notes:"
+msgstr "Poznámky:"
+
+#: app/templates/auth/login.html:4 app/templates/auth/login.html:9
+msgid "Login"
+msgstr "Přihlásit"
+
+#: app/templates/auth/login.html:16
+msgid "New user?"
+msgstr "Nový uživatel?"
+
+#: app/templates/auth/login.html:18
+msgid "Click here to register"
+msgstr "Klikněte sem pro registraci"
+
+#: app/templates/auth/unconfirmed.html:10
+msgid "You have not confirmed your account yet."
+msgstr "Stále jste nepotvrdili svůj účet."
+
+#: app/templates/auth/unconfirmed.html:12
+msgid "Before you can access this site you need to confirm your account."
+msgstr "Pro přístup je nuté potvrdit svůj účet."
+
+#: app/templates/auth/unconfirmed.html:13
+msgid ""
+"Check your inbox, you should have received an email with a confirmation "
+"link."
+msgstr "Ověřte svoji emialovou shránku, měli byste obdržet potvrzující email."
+
+#: app/templates/auth/unconfirmed.html:16
+msgid "Need another confirmation email?"
+msgstr "Potřebujete další potvrzující email?"
+
+#: app/templates/auth/unconfirmed.html:17
+msgid "Click here"
+msgstr "Klikněte sem"
+

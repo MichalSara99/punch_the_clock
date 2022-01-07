@@ -1,24 +1,27 @@
 from flask_wtf import FlaskForm
+from flask_babel import lazy_gettext as _l
 from wtforms import SubmitField,SelectField,TimeField
 from datetime import datetime,timedelta
 from sqlalchemy import desc,asc
 from ..models import Time_dimension
+from app import translate_month
+
 
 
 class SettingsForm(FlaskForm):
     workingTime = TimeField("",default=datetime(1900,1,1,8,0,0))
-    settingsSubmit = SubmitField("Save")
+    settingsSubmit = SubmitField(_l("Save"))
 
 
 class HistoryForm(FlaskForm):
     historyYear = SelectField("",coerce=int,default=datetime.now().year)
     historyMonth = SelectField("",coerce=int,default=datetime.now().month)
-    historySubmit = SubmitField("Show")
+    historySubmit = SubmitField(_l("Show"))
 
     def __init__(self, *args, **kwargs):
         super(HistoryForm, self).__init__(*args,**kwargs)
         self.historyYear.choices = [(td.year,td.year) for td in Time_dimension.query.group_by(Time_dimension.year).all()]
-        self.historyMonth.choices = [(td.month, td.month_name) for td in
+        self.historyMonth.choices = [(td.month, translate_month(td.month_name)) for td in
                                    Time_dimension.query.group_by(Time_dimension.month, Time_dimension.month_name).all()]
 
 def get_propper_week():
@@ -33,18 +36,19 @@ def get_propper_week():
     return w[1]
 
 
+
 class SelectForm(FlaskForm):
     searchYear = SelectField("",coerce=int,default=datetime.now().year)
     searchMonth = SelectField("",coerce=int,default=datetime.now().month)
     searchWeek = SelectField("",coerce=int,default=get_propper_week())
-    searchSubmit = SubmitField("Show")
+    searchSubmit = SubmitField(_l("Show"))
 
     def __init__(self, *args, **kwargs):
         super(SelectForm, self).__init__(*args,**kwargs)
         today = datetime.now()
         weeks = {}
         self.searchYear.choices = [(td.year,td.year) for td in Time_dimension.query.group_by(Time_dimension.year).all()]
-        self.searchMonth.choices = [(td.month, td.month_name) for td in
+        self.searchMonth.choices = [(td.month, translate_month(td.month_name)) for td in
                                    Time_dimension.query.group_by(Time_dimension.month, Time_dimension.month_name).all()]
         week_numbers = Time_dimension.query.filter_by(year=today.year, month=today.month).group_by(Time_dimension.week)\
             .order_by(asc(Time_dimension.week)).all()

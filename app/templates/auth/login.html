@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %} Punch The Clock! - Login{% endblock %}
+{% block title %} Punch The Clock! - {{ _('Login') }}{% endblock %}
 
 
 {% block page_content %}
 <div class="page-header">
-        <h1>Login</h1>
+        <h1>{{ _('Login') }}</h1>
 </div>
 <div class = "col-md-4">
     {{log_form.hidden_tag()}}
     {{wtf.quick_form(log_form)}}
     <br/>
             <p>
-    New user?
+    {{ _('New user?') }}
         <a href="{{ url_for('auth.register') }}">
-        Click here to register
+        {{ _('Click here to register') }}
         </a>
     </p>
 

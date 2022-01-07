@@ -1,5 +1,6 @@
 from . import main
 from datetime import timedelta
+from app import translate_weekday
 
 @main.app_template_filter()
 def formatTimedelta(delta):
@@ -33,3 +34,8 @@ def formatTotalTimedelta(delta):
 
     time_fmt = f"{hours:02d}:{minutes:02d}"
     return time_fmt
+
+@main.app_template_filter()
+def translateWeekday(weekday):
+    return translate_weekday(weekday)
+

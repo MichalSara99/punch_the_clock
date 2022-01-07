@@ -1,10 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %} Punch The Clock! - About {% endblock %}
+{% block title %} Punch The Clock! - {{ _('About') }} {% endblock %}
 
 
 {% block page_content %}
 <div class="page-header">
-<h1>Dedicated to my mom Eva Šárová </h1>
+<h1>{{ _('Author') }}</h1>
 </div>
+<div><h4>Michal Šára</h4>
+</div>
+<div class="page-header">
+<h1>{{ _('Dedication') }}</h1>
+</div>
+<div><h4>Eva Šárová {{ _('(my mom)') }}</h4></div>
 {% endblock %}

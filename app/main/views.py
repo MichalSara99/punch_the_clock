@@ -1,5 +1,6 @@
 from flask import render_template,request,jsonify,flash,redirect,url_for
 from flask_login import current_user
+from flask_babel import _
 from sqlalchemy import desc,asc,func
 from . import main
 from .. import db
@@ -146,7 +147,7 @@ def on_save():
                        year=td.year,
                        month = td.month,
                        week = td.week)
-        flash('Changes have been saved.')
+        flash(_('Changes have been saved.'))
         return redirect(next)
 
 
@@ -177,7 +178,7 @@ def on_create():
                        year=int(data_sent['year']),
                        month = int(data_sent['month']),
                        week = int(data_sent['week']))
-        flash('New week has been added.')
+        flash(_('New week has been added.'))
         return redirect(next)
 
 
@@ -246,7 +247,7 @@ def settings():
         db.session.flush()
         db.session.commit()
         next = url_for('main.settings')
-        flash('Settings have been saved')
+        flash(_('Settings have been saved'))
         return redirect(next)
     wt = User_settings.query.filter_by(user_id=current_user.id).first()
     form.workingTime.data = (datetime(1900, 1, 1) + wt.working_time)

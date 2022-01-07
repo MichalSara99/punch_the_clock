@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{url_for('static',filename='bootstrap-table.min.css')}}">
 {% endblock %}
 
-{% block title %} Punch The Clock! - TimeSheets {% endblock %}
+{% block title %} Punch The Clock! - {{ _('TimeSheets') }} {% endblock %}
 
 
 {% block page_content %}
@@ -16,17 +16,17 @@
 
     {{ form.hidden_tag() }}
 <div class="input-group">
-    <span class="input-group-addon" title="* Year" id="yearSelect">Year</span>
+    <span class="input-group-addon" title="* Year" id="yearSelect">{{ _('Year') }}</span>
     {{ form.searchYear(id='yearSelect' ,class='form-control') }}
-    <span class="input-group-addon" title="* Month" id="monthSelect">Month</span>
+    <span class="input-group-addon" title="* Month" id="monthSelect">{{ _('Month') }}</span>
     {{ form.searchMonth(id='monthSelect'  ,class='form-control') }}
-    <span class="input-group-addon" title="* Week" id="weekSelect">Week</span>
+    <span class="input-group-addon" title="* Week" id="weekSelect">{{ _('Week') }}</span>
     {{ form.searchWeek(id='weekSelect' ,class='form-control') }}
     <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
     {{ form.searchSubmit(id='showSubmit' ,class='form-control') }}
     <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
     {% if create_btn %}
-    <button type="submit" name="createButton" class="form-control btn-primary">Create</button>
+    <button type="submit" name="createButton" class="form-control btn-primary">{{ _('Create') }}</button>
     {% endif %}
 
 </div>
@@ -37,20 +37,20 @@
 <table id="my_table_1" data-toggle="table" data-sort-stable="true" >
     <thead>
     <tr>
-        <th data-sortable="false">Date</th>
-        <th data-sortable="false">Weekday</th>
-        <th data-sortable="false">Start Time</th>
-        <th data-sortable="false">Lunch Duration</th>
-        <th data-sortable="false">End Time</th>
-        <th data-sortable="false">Worked</th>
-        <th data-sortable="false">Overtime</th>
+        <th data-sortable="false">{{ _('Date') }}</th>
+        <th data-sortable="false">{{ _('Weekday') }}</th>
+        <th data-sortable="false">{{ _('Start Time') }}</th>
+        <th data-sortable="false">{{ _('Lunch Duration') }}</th>
+        <th data-sortable="false">{{ _('End Time') }}</th>
+        <th data-sortable="false">{{ _('Worked') }}</th>
+        <th data-sortable="false">{{ _('Overtime') }}</th>
     </tr>
     </thead>
    <tbody>
         {% for tpl in time_table %}
         <tr>
             <td><input type="hidden" name="date_id" value="{{tpl[0]}}">{{tpl[1].strftime('%d-%m-%Y')}}</td>
-            <td>{{tpl[2]}}</td>
+            <td>{{tpl[2]|translateWeekday}}</td>
             <td><input type="time" id = "start_{{tpl[0]}}" name="start_time" value="{{tpl[3]|formatTimedelta}}"></td>
             <td><input type="time" id = "lunch_{{tpl[0]}}" name="lunch_duration" value="{{tpl[4]|formatTimedelta}}"></td>
             <td><input type="time" id = "end_{{tpl[0]}}" name="end_time" value="{{tpl[5]|formatTimedelta}}"></td>
@@ -61,13 +61,13 @@
         </tbody>
 </table><br/><br/>
 <div class="form-group">
-  <label for="comment">Notes:</label>
+  <label for="comment">{{ _('Notes:') }}</label>
   <textarea style="overflow:auto;resize:none" class="form-control" rows="5" id="notes">{{notes_area}}</textarea>
 </div>
 {% if save_btn %}
 <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
     <div class="text-right"> <!--You can add col-lg-12 if you want -->
-        <button id="save" name="saveButton" class="btn btn-info">Save</button>
+        <button id="save" name="saveButton" class="btn btn-info">{{ _('Save') }}</button>
     </div>
 </form>
 {% endif %}
@@ -85,6 +85,7 @@
 <script type = "text/javascript" src="{{url_for('static',filename='my.min.js')}}"></script>
 <script type = "text/javascript" src="{{url_for('static',filename='my.doc.js')}}"></script>
 <script>
+
 
 $('button[name=createButton]').click(function() {
     $.ajax({
@@ -125,6 +126,8 @@ $('button[name=saveButton]').click(function() {
         contentType: "application/json"
     });
 });
+
+
 
 
 </script>
