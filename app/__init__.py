@@ -69,7 +69,7 @@ def translate_month(month_str):
             return 'Listopad'
         elif month_str == 'December':
             return 'Prosinec'
-    return
+    return month_str
 
 def translate_weekday(weekday_str):
     if get_locale() == 'cs':
@@ -83,5 +83,5 @@ def translate_weekday(weekday_str):
             return 'Čtvrtek'
         elif weekday_str == 'Friday':
             return 'Pátek'
-    return
+    return weekday_str
 
