@@ -46,7 +46,7 @@ def historysheet(year,month,user_id):
     return tms
 
 def history_summary(year,month,user_id):
-    hs = db.session.query(Time_dimension.id,
+    hsm = db.session.query(Time_dimension.id,
                            func.sec_to_time(func.sum(func.time_to_sec(Work.worked_time))),
                            func.sec_to_time(func.sum(func.time_to_sec(Work.overtime)))). \
         join(Work, Time_dimension.id == Work.td_id). \
@@ -55,9 +55,20 @@ def history_summary(year,month,user_id):
                Work.user_id == user_id,
                Time_dimension.weekend_flag == 'f'). \
         order_by(asc(Time_dimension.id)).all()
-    if hs[0][0] is None:
-        return {'tw':timedelta(0),'to':timedelta(0)}
-    return {'tw':hs[0][1],'to':hs[0][2]}
+    hsy = db.session.query(Time_dimension.id,
+                           func.sec_to_time(func.sum(func.time_to_sec(Work.worked_time))),
+                           func.sec_to_time(func.sum(func.time_to_sec(Work.overtime)))). \
+        join(Work, Time_dimension.id == Work.td_id). \
+        filter(Time_dimension.year == year,
+               Work.user_id == user_id,
+               Time_dimension.weekend_flag == 'f'). \
+        order_by(asc(Time_dimension.id)).all()
+    totals={'twy':timedelta(0),'twm':timedelta(0),'toy':timedelta(0),'tom':timedelta(0)}
+    if hsm[0][0] is not None:
+        totals.update({'twm':hsm[0][1],'tom':hsm[0][2]})
+    if hsy[0][0] is not None:
+        totals.update({'twy':hsy[0][1],'toy':hsy[0][2]})
+    return totals
 
 def notes(year,month,week,user_id):
     nts = db.session.query(Time_dimension.id,Work_notes.notes). \

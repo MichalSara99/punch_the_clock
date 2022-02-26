@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-01-07 01:05+0100\n"
+"POT-Creation-Date: 2022-02-26 11:30+0100\n"
 "PO-Revision-Date: 2022-01-07 00:33+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: cs\n"
@@ -81,23 +81,23 @@ msgstr "Potvrzující odkaz není validní nebo již vypršel."
 msgid "A new confirmation email has been sent to your email."
 msgstr "Nový potvrzující email Vám byl zaslán."
 
-#: app/main/forms.py:11 app/templates/timesheets.html:70
+#: app/main/forms.py:13 app/templates/timesheets.html:70
 msgid "Save"
 msgstr "Uložit"
 
-#: app/main/forms.py:17 app/main/forms.py:41
+#: app/main/forms.py:19 app/main/forms.py:44
 msgid "Show"
 msgstr "Ukázat"
 
-#: app/main/views.py:150
+#: app/main/views.py:161
 msgid "Changes have been saved."
 msgstr "Změny byly uloženy."
 
-#: app/main/views.py:181
+#: app/main/views.py:192
 msgid "New week has been added."
 msgstr "Nový týden byl přidán."
 
-#: app/main/views.py:250
+#: app/main/views.py:261
 msgid "Settings have been saved"
 msgstr "Nastavení bylo uloženo."
 
@@ -160,38 +160,46 @@ msgid "Month"
 msgstr "Měsíc"
 
 #: app/templates/history.html:36
-msgid "Total Worked"
-msgstr "Celkově odpracováno"
+msgid "Total Worked Per Month"
+msgstr "Celkově odpracováno za měsíc"
 
 #: app/templates/history.html:40
-msgid "Total Overtime"
-msgstr "Celkový přesčas"
+msgid "Total Worked Per Year"
+msgstr "Celkově odpracováno za rok"
 
-#: app/templates/history.html:50 app/templates/timesheets.html:40
+#: app/templates/history.html:44
+msgid "Total Overtime Per Month"
+msgstr "Celkový přesčas za měsíc"
+
+#: app/templates/history.html:48
+msgid "Total Overtime Per Year"
+msgstr "Celkový přesčas za rok"
+
+#: app/templates/history.html:58 app/templates/timesheets.html:40
 msgid "Date"
 msgstr "Datum"
 
-#: app/templates/history.html:51 app/templates/timesheets.html:41
+#: app/templates/history.html:59 app/templates/timesheets.html:41
 msgid "Weekday"
 msgstr "Den"
 
-#: app/templates/history.html:52 app/templates/timesheets.html:42
+#: app/templates/history.html:60 app/templates/timesheets.html:42
 msgid "Start Time"
 msgstr "Start"
 
-#: app/templates/history.html:53 app/templates/timesheets.html:43
+#: app/templates/history.html:61 app/templates/timesheets.html:43
 msgid "Lunch Duration"
 msgstr "Polední přestávka"
 
-#: app/templates/history.html:54 app/templates/timesheets.html:44
+#: app/templates/history.html:62 app/templates/timesheets.html:44
 msgid "End Time"
 msgstr "Konec"
 
-#: app/templates/history.html:55 app/templates/timesheets.html:45
+#: app/templates/history.html:63 app/templates/timesheets.html:45
 msgid "Worked"
 msgstr "Odpracováno"
 
-#: app/templates/history.html:56 app/templates/timesheets.html:46
+#: app/templates/history.html:64 app/templates/timesheets.html:46
 msgid "Overtime"
 msgstr "Přesčas"
 

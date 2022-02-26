@@ -33,12 +33,20 @@
         </colgroup>
         <tbody>
         <tr>
-            <td><p class="fw-bold">{{ _('Total Worked') }}</p></td>
-            <td><input type="text"  size="6" id = "total_worked" name="totalwork" value="{{info['tw']|formatTotalTimedelta}}" disabled></td>
+            <td><p class="fw-bold">{{ _('Total Worked Per Year') }}</p></td>
+            <td><input type="text"  size="6" id = "total_worked_year" name="totalworkyear" value="{{info['twy']|formatTotalTimedelta}}" disabled></td>
         </tr>
         <tr>
-            <td><p class="fw-bold">{{ _('Total Overtime') }}</p></td>
-            <td><input type="text"  size="6" id = "total_overtime" name="totalovertime" value="{{info['to']|formatTotalTimedelta}}" disabled></td>
+            <td><p class="fw-bold">{{ _('Total Overtime Per Year') }}</p></td>
+            <td><input type="text"  size="6" id = "total_overtime_year" name="totalovertimeyear" value="{{info['toy']|formatTotalTimedelta}}" disabled></td>
+        </tr>
+        <tr>
+            <td><p class="fw-bold">{{ _('Total Worked Per Month')}}</p></td>
+            <td><input type="text"  size="6" id = "total_worked_month" name="totalworkmonth" value="{{info['twm']|formatTotalTimedelta}}" disabled></td>
+        </tr>
+        <tr>
+            <td><p class="fw-bold">{{ _('Total Overtime Per Month') }}</p></td>
+            <td><input type="text"  size="6" id = "total_overtime_month" name="totalovertimemonth" value="{{info['tom']|formatTotalTimedelta}}" disabled></td>
         </tr>
         </tbody>
     </table>
